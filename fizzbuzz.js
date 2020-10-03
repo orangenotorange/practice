@@ -1,11 +1,8 @@
 
 function BaseNumber(n){
-
   this.n = n;
   this.showNumber = true;
-  this.getNumber = () => {
-    return this.showNumber ? this.n.toString() : '';
-  }
+  this.getNumber = () =>  this.showNumber ? this.n.toString() : '';
 }
 
 function BaseDecorator(baseNumber) {
@@ -13,10 +10,7 @@ function BaseDecorator(baseNumber) {
 
   baseNumber.showNumber = false;
   this.baseNumber = baseNumber;
-  this.getNumber = () => {
-    return this.baseNumber.getNumber() + this.number;
-  };
-
+  this.getNumber = () => this.baseNumber.getNumber() + this.number;
 }
 
 function FizzDecorator(baseNumber){
@@ -31,19 +25,29 @@ function BuzzDecorator(baseNumber){
   return fizzDecorator;
 }
 
-function DecoratorFactory() {
+function ModDecoratorFactory() {
 
   this.getDecoratedNumber = (n) => {
     let number =  new BaseNumber(n);
     if(n % 3 === 0){
       number = new FizzDecorator(number);
     }
-    if(n.toString().includes(3)){
-      number = new FizzDecorator(number);
-    }
 
     if(n % 5 === 0) {
       number = new BuzzDecorator(number);
+    }
+
+    return number;
+  }
+}
+
+function MatchDecoratorFactory() {
+
+  this.getDecoratedNumber = (n) => {
+    let number =  new BaseNumber(n);
+   
+    if(n.toString().includes(3)){
+      number = new FizzDecorator(number);
     }
 
     if(n.toString().includes(5)){
@@ -57,7 +61,7 @@ function DecoratorFactory() {
 console.log('FizzBuzz');
 let numbers = [...Array(101).keys()];
 
-const factory = new DecoratorFactory();
+const factory = new ModDecoratorFactory();
 let baseNumbers = numbers.map(n => factory.getDecoratedNumber(n));
 baseNumbers.forEach(n => console.log(n.getNumber()));
 
