@@ -15,43 +15,28 @@ const tree =
     { id:311,  label : 'tree1112', children: []}
   ]};
 
-
-
 const countNodes = (node) => {
   let sum  = 1;
   if(node.children){
-    for (const c of node.children) {
+    node.children.forEach(c => {
       sum += countNodes(c);
-    }
+    });
   }
 
   return sum;
 };
 
-const countNodesTail = (node, total) => {
-  if(!node.children || node.children.length === 0) {
-    return total + 1;
-  }
-
-  console.log(node.children)
-
-  for (const n of node.children) {
-    console.log(n);
-    return countNodesTail(n, total)
-  }
-};
-//console.log(count(tree));
+const treeCount =  countNodes(tree);
+console.log(`Tree Count ${treeCount}`);
 
 // return all nodes with no branches
-
 const getEndNode = (node) => {
   let endNodes = [];
-  if(node.children && node.children.length > 0){
-    for(const c of node.children){
-      //console.log(c);
-      const nodes = getEndNode(c);
-      endNodes.push(...nodes)
-    }
+  if(node.children && node.children.length > 0) {
+    node.children.forEach(child => {
+      const nodes = getEndNode(child);
+      endNodes = [...endNodes, ...nodes];
+    })
   } else {
       endNodes.push(node);
   }
@@ -59,13 +44,11 @@ const getEndNode = (node) => {
   return endNodes;
 };
 
-//console.log(getEndNode(tree));
-
+const nodes =  getEndNode(tree);
 // Create tree.
 
 const nodeRangeCount = 3;
 const nodeCount = Math.ceil(Math.random() * nodeRangeCount);
-console.log(nodeCount);
 let count = 0;
 const createNodes = (node) => {
   const child = {
@@ -96,11 +79,8 @@ const createNodes = (node) => {
 
   return child;
 };
-
 const rootNode = {id: 1, label : 'root', level: 0, children: []};
 const deeptree = createNodes(rootNode, true);
 
 const deepTreeNodecount = countNodes(deeptree);
 console.log(deepTreeNodecount);
-const nodeTailCount = countNodesTail(deeptree);
-console.log('tail recursive' + nodeTailCount);
